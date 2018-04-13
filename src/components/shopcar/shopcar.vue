@@ -33,7 +33,7 @@ export default {
         return [
           {
             name: 'haha',
-            nowPrice: 10,
+            price: 10,
             count: 2
           }
         ];
@@ -44,7 +44,7 @@ export default {
     totalPrice: function () {
       let total = 0;
       this.selectFood.forEach((food) => {
-        total += food.count * food.nowPrice;
+        total += food.count * food.price;
       });
       return total;
     },
@@ -58,8 +58,8 @@ export default {
     payDesc: function () {
       if (this.totalPrice === 0) {
         return '¥' + this.minPrice + '起送';
-      } else if(this.totalPrice> 0 && this.totalPrice < this.minPrice) {
-        let leaving = this.minPrice - this.totalPrice
+      } else if (this.totalPrice > 0 && this.totalPrice < this.minPrice) {
+        let leaving = this.minPrice - this.totalPrice;
         return '还差¥' + leaving + '起送';
       } else {
         return '结算';

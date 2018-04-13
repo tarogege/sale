@@ -30,19 +30,23 @@
                   <span class="now-price">¥{{food.price}}</span>
                   <span v-if="food.oldPrice" class="old-price">¥{{food.oldPrice}}</span>
                 </div>
+                <div class="carcontrol-wrapper">
+                  <carcontrol :food="food"></carcontrol>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-    <shopcar :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcar>
+    <shopcar :selectFood="selectFood" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcar>
   </div>
 </template>
 
 <script>
   import BScroll from 'better-scroll';
   import shopcar from '../shopcar/shopcar.vue';
+  import carcontrol from '../carcontrol/carcontrol.vue';
 
   const ERR_OK = 0;
 
@@ -60,7 +64,8 @@
       };
     },
     components: {
-      shopcar: shopcar
+      shopcar: shopcar,
+      carcontrol: carcontrol
     },
     computed: {
       currentIndex() {
@@ -72,6 +77,17 @@
           }
         }
         return 0;
+      },
+      selectFood() {
+        let selectFood = [];
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count) {
+              selectFood.push(food);
+            }
+          });
+        });
+        return selectFood;
       }
     },
     created: function () {
@@ -223,6 +239,7 @@
                 span
                   margin-right 12px
             .price
+              display inline-block
               font-weight 700
               line-height 24px
               .now-price
@@ -232,4 +249,9 @@
               .old-price
                 font-size 10px
                 color rgb(147, 153, 159)
+            .carcontrol-wrapper
+              position absolute
+              display inline-block
+              right 0
+              bottom 18px
 </style>

@@ -10,14 +10,41 @@
       <div class="desc">另需配送费¥{{deliveryPrice}}元</div>
     </div>
     <div class="shopcar-right">
-      <div class="pay" :class="{btnsuccess: totalPrice >= minPrice}">{{payDesc}}</div>
+      <div class="pay" :class="{btnsuccess: totalPrice >= minPrice}" @click="showShopcar()">{{payDesc}}</div>
+    </div>
+  </div>
+  <div class="shopcar-list" v-show="listShow">
+    <div class="list-header">
+      <span class="title">购物车</span>
+      <span class="empty">清空</span>
+    </div>
+    <div class="list-content">
+      <ul>
+        <li v-for="(food,index) in selectFoods" :key="index">
+          <span class="food-name">{{food.name}}</span>
+          <div class="price">
+            <span>¥{{food.price*food.count}}</span>
+          </div>
+          <div class="carcontrol-wrapper">
+            <carcontrol :food="food"></carcontrol>
+          </div>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
 </template>
 
 <script type="text/ecmascript-6">
+import carcontrol from '../carcontrol/carcontrol';
 export default {
+  components: {carcontrol},
+  data: function () {
+    return {
+      fold: true,
+      listShow: false
+    };
+  },
   props: {
     deliveryPrice: {
       type: Number,
@@ -27,7 +54,7 @@ export default {
       type: Number,
       default: 0
     },
-    selectFood: {
+    selectFoods: {
       type: Array,
       default: function () {
         return [
@@ -43,14 +70,14 @@ export default {
   computed: {
     totalPrice: function () {
       let total = 0;
-      this.selectFood.forEach((food) => {
+      this.selectFoods.forEach((food) => {
         total += food.count * food.price;
       });
       return total;
     },
     totalCount: function () {
       let count = 0;
-      this.selectFood.forEach((food) => {
+      this.selectFoods.forEach((food) => {
         count += food.count;
       });
       return count;
@@ -64,6 +91,24 @@ export default {
       } else {
         return '结算';
       }
+    }
+  },
+  watch: {
+    listShow: function () {
+      if (!this.totalCount()) {
+        this.fold = true;
+        return false;
+      }
+      let show = this.fold;
+      return show;
+    }
+  },
+  methods: {
+    showShopcar: function () {
+      if (this.totalCount() === 0) {
+        return;
+      }
+      this.fold = !this.fold;
     }
   }
 };

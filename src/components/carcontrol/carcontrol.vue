@@ -1,14 +1,14 @@
 <template>
 <div class="car-control">
   <transition name="move">
-  <div class="reduce" v-show="food.count" @click="reduceFood($event)">
+  <div class="reduce" v-show="food.count" @click.stop.prevent="reduceFood($event)">
     <div class="reduce-icon">
       <i class="inner fa fa-minus-circle" aria-hidden="true"></i>
     </div>
   </div>
   </transition>
   <label v-show="food.count" class="label">{{food.count}}</label>
-  <div class="add" @click="addFood($event)"><i class="fa fa-plus-circle" aria-hidden="true"></i></div>
+  <div class="add" @click.stop.prevent="addFood($event)"><i class="fa fa-plus-circle" aria-hidden="true"></i></div>
 </div>
 </template>
 

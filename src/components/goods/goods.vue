@@ -13,7 +13,7 @@
         <li v-for="(good,index) in goods" :key="index" ref="goodList" class="food-list">
           <h1 class="menu-title">{{good.name}}</h1>
           <ul class="food-list">
-            <li v-for="(food,index) in good.foods" :key="index" class="food-item border-1px">
+            <li @click="selectFood(food,$event)" v-for="(food,index) in good.foods" :key="index" class="food-item border-1px">
               <div class="avatar">
                 <img :src="food.icon" width="57" height="57"/>
               </div>
@@ -39,7 +39,8 @@
         </li>
       </ul>
     </div>
-    <shopcar :selectFood="selectFood" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcar>
+    <shopcar :selectFoods="selectFoods" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcar>
+    <food :food="selectedFood" ref="food"></food>
   </div>
 </template>
 
@@ -47,6 +48,7 @@
   import BScroll from 'better-scroll';
   import shopcar from '../shopcar/shopcar.vue';
   import carcontrol from '../carcontrol/carcontrol.vue';
+  import food from '../food/food.vue';
 
   const ERR_OK = 0;
 
@@ -60,12 +62,14 @@
       return {
         goods: [],
         listHeight: [],
-        scrollY: 0
+        scrollY: 0,
+        selectedFood: {}
       };
     },
     components: {
       shopcar: shopcar,
-      carcontrol: carcontrol
+      carcontrol: carcontrol,
+      food: food
     },
     computed: {
       currentIndex() {
@@ -78,16 +82,16 @@
         }
         return 0;
       },
-      selectFood() {
-        let selectFood = [];
+      selectFoods() {
+        let selectFoods = [];
         this.goods.forEach((good) => {
           good.foods.forEach((food) => {
             if (food.count) {
-              selectFood.push(food);
+              selectFoods.push(food);
             }
           });
         });
-        return selectFood;
+        return selectFoods;
       }
     },
     created: function () {
@@ -142,6 +146,13 @@
         let el = foodList[index];
         this.foodsScroll.scrollToElement(el, 300);
         return 0;
+      },
+      selectFood(food, event) {
+        if (!event._constructed) {
+          return;
+        }
+        this.selectedFood = food;
+        this.$refs.food.show();
       }
     }
   };

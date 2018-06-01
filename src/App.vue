@@ -7,7 +7,7 @@
       <div class="tab-item"><router-link to="/seller">卖家</router-link></div>
     </div>
 
-    <router-view :seller="seller"></router-view>
+    <router-view :seller="seller" class="router-view"></router-view>
   </div>
 </template>
 
@@ -53,4 +53,6 @@
           display: block
           &.active
             color: rgb(240, 20, 20)
+    .router-view
+      overflow hidden
 </style>

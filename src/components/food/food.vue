@@ -1,6 +1,7 @@
 <template>
   <transition name="move">
     <div v-show="showFood" class="food-wrapper" ref="food">
+      <div class="food-content">
       <div class="img-header">
         <img :src="food.image" class="head-img">
         <div class="back" @click="hide()">
@@ -22,8 +23,25 @@
       <split></split>
       <div class="ratings">
         <h2 class="title">商品评价</h2>
-        <ratingslect :ratings="food.ratings" :catology="['全部','推荐', '吐槽']" :selectType="selectType" :onlyContent="onlyContent"></ratingslect>
+        <ratingslect @select="selectRatings" @contentToggle="toggleContent" :ratings="food.ratings" :catology="['全部','推荐', '吐槽']" :selectType="selectType" :onlyContent="onlyContent"></ratingslect>
       </div>
+      <div class="rating-wrapper">
+        <ul class="rating-list" v-show="food.ratings && food.ratings.length!== 0">
+          <li v-for="(rating,index) in food.ratings" :key="index" v-show="needShow(rating.rateType,rating.text)">
+            <div class="date">{{rating.rateTime | formatDate}}</div>
+            <div class="detail">
+              <i class="fa" :class="{'fa-thumbs-up': rating.rateType === 0,'fa-thumbs-down':rating.rateType === 1}"></i>
+              <span class="text">{{rating.text}}</span>
+            </div>
+            <div class="user">
+              <span class="username">{{rating.username}}</span>
+              <img :src="rating.avatar" class="avatar">
+            </div>
+          </li>
+        </ul>
+        <div v-show="!food.ratings || !food.ratings.length" class="no-rating">暂无评价</div>
+      </div>
+    </div>
     </div>
   </transition>
 </template>
@@ -34,8 +52,9 @@
   import Vue from 'vue';
   import split from '../split/split.vue';
   import ratingslect from '../ratingslect/ratingselect.vue';
+  import {formatDate} from '../../common/js/date.js';
 
-export default {
+  export default {
   components: {
     carcontrol: carcontrol,
     split: split,
@@ -44,6 +63,25 @@ export default {
   props: {
     food: {
       type: Object
+    }
+  },
+  filters: {
+    formatDate(time) {
+      let date = new Date(time);
+      return formatDate(date, 'yyyy-MM-dd hh:mm');
+    }
+  },
+  computed: {
+    effectiveRatings() {
+      if (this.onlyContent) {
+        if (this.food.ratings.length !== 0) {
+          return this.food.ratings.filter((rating) => {
+            return rating.text !== '';
+          });
+        }
+        return null;
+      }
+      return this.food.ratings;
     }
   },
   data: function () {
@@ -60,11 +98,24 @@ export default {
       this.selectType = 0;
       this.$nextTick(() => {
         if (!this.scroll) {
-          this.scroll = new BScroll(this.$refs.food, {click: true});
+          this.scroll = new BScroll(this.$refs.food, {
+            click: true
+          });
         } else {
           this.scroll.refresh();
         }
       });
+    },
+    needShow(type, text) {
+      if (this.onlyContent && !text) {
+        return false;
+      }
+      if (this.selectType === 0) {
+        return true;
+      } else {
+        type += 1;
+        return this.selectType === type;
+      }
     },
     hide() {
       this.showFood = false;
@@ -74,6 +125,18 @@ export default {
         return;
       }
     Vue.set(this.food, 'count', 1);
+    },
+    selectRatings(type) {
+      this.selectType = type;
+      this.$nextTick(() => {
+        this.scroll.refresh();
+      });
+    },
+    toggleContent(content) {
+      this.onlyContent = content;
+      this.$nextTick(() => {
+        this.scroll.refresh();
+      });
     }
   }
 };
@@ -176,4 +239,45 @@ export default {
       color rgb(77,85,93)
       padding-bottom 6px
       margin-bottom 12px
+  .rating-list
+    li
+      position relative
+      padding 16px 18px
+      border-bottom 1px solid rgba(7,17,27,0.1)
+      .date
+        font-size 10px
+        color: rgb(147,153,159)
+        line-height 12px
+        //margin-bottom 6px
+      .fa
+        font-size 12px
+        line-height 16px
+        margin-right 4px
+        &.fa-thumbs-up
+          color rgb(0,160,220)
+        &.a-thumbs-down
+          color rgb(147,153,159)
+      .text
+        font-size 12px
+        color rgb(7,17,27)
+        line-height 16px
+      .user
+        position absolute
+        right 18px
+        top 16px
+        .username
+          font-size 10px
+          color rgb(147,153,159)
+          line-height 12px
+          margin-right 6px
+        .avatar
+          display inline-block
+          font-size 0
+          width 12px
+          height 12px
+          border-radius 50%
+  .no-rating
+    padding 16px 18px
+    font-size 16px
+    color black
 </style>

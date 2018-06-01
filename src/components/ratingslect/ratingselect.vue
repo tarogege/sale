@@ -1,9 +1,11 @@
 <template>
 <div class="ratingselect">
   <div class="items">
-    <a class="all" :class="{'active':selectType === 0}"><span>{{catology[0]}}</span><span class="count">{{ratings.length}}</span></a><a class="positive" :class="{'active':selectType === 1}"><span>{{catology[1]}}</span><span class="count">{{myfilter(0)}}</span></a><a class="negative" :class="{'active':selectType === 2}">{{catology[2]}}<span class="count">{{myfilter(1)}}</span></a>
+    <a @click='select($event,0)' class="all" :class="{'active':selectType === 0}"><span>{{catology[0]}}</span><span class="count">{{ratings.length}}</span></a>
+    <a @click="select($event,1)" class="positive" :class="{'active':selectType === 1}"><span>{{catology[1]}}</span><span class="count">{{myfilter(0)}}</span></a>
+    <a @click="select($event,2)" class="negative" :class="{'active':selectType === 2}">{{catology[2]}}<span class="count">{{myfilter(1)}}</span></a>
   </div>
-  <div class="only-content">
+  <div class="only-content" @click="toggleContent($event)">
     <i class="fa fa-check-circle" aria-hidden="true" :class="{'on':onlyContent}"></i>
     <span>只看有评价的内容</span>
   </div>
@@ -42,17 +44,37 @@ export default {
       default: true
     }
   },
+  data() {
+    return {
+      dselectTyoe: this.selectType,
+      donlyContent: this.onlyContent
+    };
+  },
   methods: {
     myfilter(rateType) {
       let count = 0;
-      for (var i = 0; i < this.ratings.length;i++) {
+      for (var i = 0; i < this.ratings.length; i++) {
         if (this.ratings[i].rateType === rateType) {
           count++;
         }
       }
       return count;
+    },
+    select(event, selectType) {
+      if (!event._constructed) {
+        return;
+      }
+      this.dselectType = selectType;
+      this.$emit('select', this.dselectType);
+    },
+    toggleContent(event) {
+      if (!event._constructed) {
+        return;
+      }
+      this.donlyContent = !this.donlyContent;
+      this.$emit('contentToggle', this.donlyContent);
     }
-  },
+  }
 };
 </script>
 
@@ -88,7 +110,8 @@ export default {
       &.avtive
         background-color rgb(77,85,93)
   .only-content
-    padding 12px 18px
+    padding-top 12px
+    padding-bottom 12px
     border-bottom 1px solid rgba(7,17,27,0.1)
     .fa-check-circle,span
       color rgb(147,153,159)

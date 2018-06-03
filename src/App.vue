@@ -7,12 +7,15 @@
       <div class="tab-item"><router-link to="/seller">卖家</router-link></div>
     </div>
 
+    <keep-alive>
     <router-view :seller="seller" class="router-view"></router-view>
+    </keep-alive>
   </div>
 </template>
 
 <script>
   import myheader from './components/myheader/myheader.vue';
+  import {urlParse} from './common/js/util';
 
   export default {
     name: 'App',
@@ -21,14 +24,20 @@
     },
     data: function () {
       return {
-        seller: {}
+        seller: {
+          type: Object,
+          id: (() => {
+            let queryParam = urlParse();
+            return queryParam.id;
+          })()
+        }
       };
     },
     created: function () {
-      this.$http.get('api/seller').then(response => {
+      this.$http.get('api/seller?id=' + this.seller.id).then(response => {
         response = response.body;
         if (response.errno === 0) {
-          this.seller = response.data;
+          this.seller = Object.assign({}, this.seller, response.data);
         }
       });
     }

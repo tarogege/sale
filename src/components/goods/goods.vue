@@ -2,7 +2,8 @@
   <div class="goods">
     <div class="menu-wrapper" ref="menuWrapper">
       <ul class="menu-list">
-        <li v-for="(good,index) in goods" :key="index" class="good-li" :class = "{activeMenuItem: currentIndex== index}" @click="selectMenu($event,index)">
+        <li v-for="(good,index) in goods" :key="index" class="good-li" :class="{activeMenuItem: currentIndex== index}"
+            @click="selectMenu($event,index)">
           <span v-show="good.type !== -1" class="icon" :class="classMap[good.type]" ref="mymy"></span>
           <span class="text">{{good.name}}</span>
         </li>
@@ -13,7 +14,8 @@
         <li v-for="(good,index) in goods" :key="index" ref="goodList" class="food-list">
           <h1 class="menu-title">{{good.name}}</h1>
           <ul class="food-list">
-            <li @click="selectFood(food,$event)" v-for="(food,index) in good.foods" :key="index" class="food-item border-1px">
+            <li @click="selectFood(food,$event)" v-for="(food,index) in good.foods" :key="index"
+                class="food-item border-1px">
               <div class="avatar">
                 <img :src="food.icon" width="57" height="57"/>
               </div>
@@ -161,108 +163,110 @@
 <style rel="stylesheet/stylus" lang="stylus">
   @import "../../common/stylus/mixin.styl"
   .goods
-    display flex
-    width 100%
-    position absolute
-    top 177px
-    bottom 46px
-    overflow hidden
-    .menu-wrapper
-      flex 0 0 80px
-      width 80px
-      .menu-list
-        .activeMenuItem
-        .good-li
-          //display block
-          display table
-          width 100%
-          height 54px
-          padding auto 12px
-          //vertical-align middle
-          font-size 14px
-          line-height 14px
-          text-align center
-          background-color rgba(7, 17, 27, 0.1)
-          &.activeMenuItem
-            background-color white
-            font-weight 700
-          .icon
-            display inline-block
-            margin-top 15px
-            width 12px
-            height 12px
-            background-size 12px 12px
-            background-repeat no-repeat
-            &.decrease
-              bg-image('decrease_3')
-            &.discount
-              bg-image('discount_3')
-            &.guarantee
-              bg-image('guarantee_3')
-            &.invoice
-              bg-image('invoice_3')
-            &.special
-              bg-image('special_3')
-          .text
-            display table-cell
-            vertical-align middle
-            color black
-            font-weight 200
-            font-size 12px
-            border-bottom 1px solid rgba(7, 17, 27, 0.1)
-    .foods
-      flex 1
-      .menu-title
-        height 26px
-        background-color #f3f5f7
-        border-left 2px solid #d0dde1
-        font-size 12px
-        color rgb(147, 153, 159)
-        line-height 26px
-        padding-left 14px
-      .food-list
-        //ul
-        .food-item
-          //li
-          margin 18px 18px 0
-          padding-bottom 18px
-          display flex
-          border-1px(rgba(7, 17, 27, 0.1))
-          &:lastchild
-            border-none()
-          .avatar
-            flex 0 0 57
-            margin-right 10px
-          .text
-            flex 1
-            .food-title
-              margin-top 2px
-              font-size 14px
-              color rgb(7, 17, 27)
-              line-height 14px
-            .food-detail
-              & > div
-                margin-top 8px
-                font-size 10px
-                color rgb(147, 153, 159)
-                line-height 10px
-              .support
-                span
-                  margin-right 12px
-            .price
-              display inline-block
-              font-weight 700
-              line-height 24px
-              .now-price
-                margin 8px 8px 0 0
-                color red
-                font-size 14px
-              .old-price
-                font-size 10px
-                color rgb(147, 153, 159)
-            .carcontrol-wrapper
-              position absolute
-              display inline-block
-              right 0
-              bottom 18px
+    display: flex
+    width: 100%
+    position: absolute
+    top: 177px
+    bottom: 46px
+    overflow: hidden
+
+  .menu-wrapper
+    flex: 0 0 80px
+    width: 80px
+    .menu-list
+      .activeMenuItem
+      .good-li
+        //display block
+        display: table
+        width: 100%
+        height: 54px
+        padding: auto 12px
+        //vertical-align middle
+        font-size: 14px
+        line-height: 14px
+        text-align: center
+        background-color: rgba(7, 17, 27, 0.1)
+        &.activeMenuItem
+          background-color: white
+          font-weight: 700
+        .icon
+          display: inline-block
+          margin-top: 15px
+          width: 12px
+          height: 12px
+          background-size: 12px 12px
+          background-repeat: no-repeat
+          &.decrease
+            bg-image('decrease_3')
+          &.discount
+            bg-image('discount_3')
+          &.guarantee
+            bg-image('guarantee_3')
+          &.invoice
+            bg-image('invoice_3')
+          &.special
+            bg-image('special_3')
+        .text
+          display: table-cell
+          vertical-align: middle
+          color: black
+          font-weight: 200
+          font-size: 12px
+          border-bottom: 1px solid rgba(7, 17, 27, 0.1)
+
+  .foods
+    flex: 1
+    .menu-title
+      height: 26px
+      background-color: #f3f5f7
+      border-left: 2px solid #d0dde1
+      font-size: 12px
+      color: rgb(147, 153, 159)
+      line-height: 26px
+      padding-left: 14px
+    .food-list
+      //ul
+      .food-item
+        //li
+        margin: 18px 18px 0
+        padding-bottom: 18px
+        display: flex
+        border-1px(rgba(7, 17, 27, 0.1))
+        &:lastchild
+          border-none()
+        .avatar
+          flex: 0 0 57
+          margin-right: 10px
+        .text
+          flex: 1
+          .food-title
+            margin-top: 2px
+            font-size: 14px
+            color: rgb(7, 17, 27)
+            line-height: 14px
+          .food-detail
+            & > div
+              margin-top: 8px
+              font-size: 10px
+              color: rgb(147, 153, 159)
+              line-height: 10px
+            .support
+              span
+                margin-right: 12px
+          .price
+            display: inline-block
+            font-weight: 700
+            line-height: 24px
+            .now-price
+              margin: 8px 8px 0 0
+              color: red
+              font-size: 14px
+            .old-price
+              font-size: 10px
+              color: rgb(147, 153, 159)
+          .carcontrol-wrapper
+            position: absolute
+            display: inline-block
+            right: 0
+            bottom: 18px
 </style>

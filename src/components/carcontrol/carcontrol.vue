@@ -17,7 +17,10 @@
 export default {
   props: {
     food: {
-      type: Object
+      type: Object,
+      default() {
+        return {};
+      }
     }
   },
   methods: {
@@ -45,36 +48,33 @@ export default {
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-.car-control
-  display inline-block
-  .move-enter-active,.move-leave-active
-  .move-enter,.move-leave-active
-  .add
-    //background-color blue
-    display inline-block
-    color rgb(0,160,220)
-    background-color white
-    padding 6px
-    font-size 24px
-  .reduce
-    display inline-block
-    //border-color rgb(0,160,220)
-    padding 6px 3px
-    .reduce-icon
-      //border 1px solid rgb(0, 160, 220)
-      font-size 21px
-      color white
-      background-color rgb(0, 160, 220)
-      padding 1px 2px
-      border-radius 55%
-  .hidden-div
-    min-width 50px
-    line-height 24px
-  .label
-    display inline-block
-    width 24px
-    font-size 10
-    line-height 24px
-    color rgb(147,153,159)
-    text-align center
+  .car-control
+    display: inline-block
+    .move-enter-active, .move-leave-active
+    .move-enter, .move-leave-active
+    .add
+      display: inline-block
+      color: rgb(0, 160, 220)
+      background-color: white
+      padding: 6px
+      font-size: 24px
+    .reduce
+      display: inline-block
+      padding: 6px 3px
+      .reduce-icon
+        font-size: 21px
+        color: white
+        background-color: rgb(0, 160, 220)
+        padding: 1px 2px
+        border-radius: 55%
+    .hidden-div
+      min-width: 50px
+      line-height: 24px
+    .label
+      display: inline-block
+      width: 24px
+      font-size: 10
+      line-height: 24px
+      color: rgb(147, 153, 159)
+      text-align: center
 </style>
